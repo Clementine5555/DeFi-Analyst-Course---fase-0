@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fase 0 — DeFi Fundamentals</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,700;1,300&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f8ff;
+    --white: #ffffff;
+    --blue-50: #eff6ff;
+    --blue-100: #dbeafe;
+    --blue-200: #bfdbfe;
+    --blue-400: #60a5fa;
+    --blue-500: #3b82f6;
+    --blue-600: #2563eb;
+    --blue-700: #1d4ed8;
+    --sky: #0ea5e9;
+    --navy: #0f172a;
+    --slate: #334155;
+    --muted: #64748b;
+    --light: #94a3b8;
+    --border: #e2e8f0;
+    --border2: #cbd5e1;
+    --green: #10b981;
+    --green-bg: #ecfdf5;
+    --amber: #f59e0b;
+    --amber-bg: #fffbeb;
+    --red: #ef4444;
+    --red-bg: #fef2f2;
+    --sans: 'DM Sans', sans-serif;
+    --serif: 'Fraunces', serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--navy);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* subtle dot pattern bg */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, #93c5fd 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.18;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    background: linear-gradient(135deg, #1d4ed8 0%, #0ea5e9 60%, #38bdf8 100%);
+    padding: 72px 24px 80px;
+    text-align: center;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0; right: 0;
+    height: 60px;
+    background: var(--bg);
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+
+  .hero-eyebrow {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(32px, 6vw, 58px);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 300;
+    color: #bae6fd;
+  }
+
+  .hero-desc {
+    font-size: 15px;
+    color: rgba(255,255,255,0.8);
+    max-width: 520px;
+    margin: 0 auto 32px;
+    font-weight: 300;
+  }
+
+  .hero-pills {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    font-size: 12px;
+    font-family: var(--mono);
+    padding: 5px 14px;
+    border-radius: 20px;
+  }
+
+  /* ── NAV ── */
+  .toc-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 0 16px;
+  }
+
+  .toc-inner {
+    display: flex;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .toc-btn {
+    background: none;
+    border: none;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    padding: 13px 14px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+  }
+
+  .toc-btn:hover, .toc-btn.active {
+    color: var(--blue-600);
+    border-bottom-color: var(--blue-500);
+  }
+
+  /* ── LAYOUT ── */
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 20px 100px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── CHAPTER HEADER ── */
+  .chapter {
+    margin-top: 64px;
+  }
+
+  .chapter-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .chapter-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--blue-500);
+    background: var(--blue-50);
+    border: 1px solid var(--blue-200);
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+  }
+
+  .chapter-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .chapter h2 {
+    font-family: var(--serif);
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .chapter-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    font-weight: 300;
+  }
+
+  /* ── PROSE ── */
+  .prose {
+    font-size: 15px;
+    color: var(--slate);
+    line-height: 1.8;
+  }
+
+  .prose p { margin-bottom: 18px; }
+  .prose p:last-child { margin-bottom: 0; }
+
+  .prose strong { color: var(--navy); font-weight: 600; }
+
+  .prose em { color: var(--blue-600); font-style: normal; font-weight: 500; }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--navy);
+    margin: 36px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--blue-100);
+  }
+
+  /* ── CALLOUT BOXES ── */
+  .box {
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin: 20px 0;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .box-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .box-analogy {
+    background: var(--blue-50);
+    border: 1px solid var(--blue-200);
+    border-left: 4px solid var(--blue-500);
+  }
+  .box-analogy .box-label { color: var(--blue-600); }
+
+  .box-example {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-left: 4px solid var(--green);
+  }
+  .box-example .box-label { color: var(--green); }
+
+  .box-warning {
+    background: var(--red-bg);
+    border: 1px solid #fecaca;
+    border-left: 4px solid var(--red);
+  }
+  .box-warning .box-label { color: var(--red); }
+
+  .box-tip {
+    background: var(--amber-bg);
+    border: 1px solid #fde68a;
+    border-left: 4px solid var(--amber);
+  }
+  .box-tip .box-label { color: #92400e; }
+
+  .box-summary {
+    background: linear-gradient(135deg, var(--blue-50), #f0f9ff);
+    border: 1px solid var(--blue-200);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin: 24px 0;
+  }
+
+  .box-summary .box-label { color: var(--blue-700); }
+
+  /* ── MATH / FORMULA ── */
+  .formula {
+    background: var(--white);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--blue-700);
+    text-align: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+
+  .formula .formula-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    color: var(--muted);
+    text-align: left;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  /* ── NUMBER EXAMPLE TABLE ── */
+  .calc-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 13px;
+    background: var(--white);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+
+  .calc-table th {
+    background: var(--blue-600);
+    color: #fff;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.3px;
+  }
+
+  .calc-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--slate);
+    vertical-align: top;
+  }
+
+  .calc-table tr:last-child td { border-bottom: none; }
+  .calc-table tr:nth-child(even) td { background: var(--blue-50); }
+
+  .calc-table td.highlight {
+    color: var(--blue-600);
+    font-family: var(--mono);
+    font-weight: 500;
+  }
+
+  .calc-table td.warn {
+    color: var(--red);
+    font-family: var(--mono);
+    font-weight: 500;
+  }
+
+  /* ── KEY TERMS ── */
+  .term-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 16px 0;
+  }
+
+  @media (max-width: 560px) { .term-grid { grid-template-columns: 1fr; } }
+
+  .term-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .term-card:hover {
+    border-color: var(--blue-400);
+    box-shadow: 0 2px 12px rgba(59,130,246,0.1);
+  }
+
+  .term-name {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--blue-600);
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+
+  .term-def {
+    font-size: 13px;
+    color: var(--slate);
+    line-height: 1.5;
+  }
+
+  /* ── STEP LIST ── */
+  .step-list {
+    list-style: none;
+    margin: 16px 0;
+  }
+
+  .step-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    color: var(--slate);
+  }
+
+  .step-list li:last-child { border-bottom: none; }
+
+  .step-num {
+    width: 26px; height: 26px;
+    background: var(--blue-600);
+    color: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── COMPARISON ── */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  @media (max-width: 560px) { .compare { grid-template-columns: 1fr; } }
+
+  .compare-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .compare-card h4 {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--blue-100);
+    color: var(--blue-700);
+  }
+
+  .compare-card ul { list-style: none; }
+  .compare-card ul li {
+    font-size: 13px;
+    color: var(--slate);
+    padding: 4px 0;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .compare-card ul li::before {
+    content: '→';
+    color: var(--blue-400);
+    flex-shrink: 0;
+    font-size: 12px;
+    margin-top: 1px;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--blue-200), transparent);
+    margin: 48px 0;
+  }
+
+  /* ── RECAP BOX ── */
+  .recap {
+    background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 40px 0 0;
+    color: #fff;
+  }
+
+  .recap h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    color: #fff;
+  }
+
+  .recap ul { list-style: none; }
+  .recap ul li {
+    font-size: 14px;
+    padding: 5px 0;
+    color: rgba(255,255,255,0.9);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .recap ul li::before {
+    content: '✓';
+    color: #86efac;
+    flex-shrink: 0;
+    font-weight: 700;
+  }
+
+  /* ── NEXT CHAPTER ── */
+  .next-card {
+    background: var(--white);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .next-card .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+
+  .next-card .title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  .next-card .arrow {
+    font-size: 22px;
+    color: var(--blue-400);
+    flex-shrink: 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    padding: 32px 24px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  footer p { font-size: 12px; color: var(--muted); }
+  footer strong { color: var(--blue-600); font-family: var(--mono); }
+
+  /* ── MOBILE ── */
+  @media (max-width: 640px) {
+    .hero { padding: 48px 16px 64px; }
+    .page { padding: 0 14px 80px; }
+    .chapter { margin-top: 48px; }
+    .prose { font-size: 14px; }
+    .section-title { font-size: 18px; }
+    .box { padding: 14px 16px; font-size: 13px; }
+    .formula { font-size: 13px; padding: 12px 14px; }
+    .calc-table th, .calc-table td { padding: 8px 10px; font-size: 12px; }
+    .recap { padding: 18px 18px; }
+    .next-card { padding: 16px 16px; }
+  }
+
+  /* ── FADE IN ON SCROLL ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">AI-Powered DeFi Analyst Course</div>
+  <h1>Fase 0 — <em>DeFi Fundamentals</em></h1>
+  <p class="hero-desc">Semua yang perlu kamu pahami sebelum lanjut ke fase berikutnya. Ditulis dalam bahasa manusia, tanpa jargon yang nggak perlu.</p>
+  <div class="hero-pills">
+    <div class="pill">8 Topik</div>
+    <div class="pill">1–2 Bulan</div>
+    <div class="pill">Fase Pertama</div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="toc-nav">
+  <div class="toc-inner">
+    <button class="toc-btn active" onclick="navTo('amm')">AMM & Pool</button>
+    <button class="toc-btn" onclick="navTo('il')">Imp. Loss</button>
+    <button class="toc-btn" onclick="navTo('lending')">Lending</button>
+    <button class="toc-btn" onclick="navTo('liquidation')">Liquidation</button>
+    <button class="toc-btn" onclick="navTo('yield')">Yield Farming</button>
+    <button class="toc-btn" onclick="navTo('staking')">Staking</button>
+    <button class="toc-btn" onclick="navTo('stablecoins')">Stablecoins</button>
+    <button class="toc-btn" onclick="navTo('risk')">Risk</button>
+  </div>
+</nav>
+
+<!-- CONTENT -->
+<div class="page">
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- CHAPTER 1: AMM & LIQUIDITY POOL        -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="amm" class="chapter fade-up">
+    <div class="chapter-label">
+      <span class="chapter-num">01</span>
+      <div class="chapter-line"></div>
+    </div>
+    <h2>AMM & Liquidity Pool</h2>
+    <p class="chapter-sub">Bagaimana transaksi DeFi berjalan tanpa perantara manusia</p>
+
+    <div class="prose">
+      <p>Bayangin kamu punya warung tukar uang. Tapi warungnya nggak butuh pegawai, nggak butuh jam buka — dia jalan sendiri 24 jam karena diatur sama rumus matematika. Itu AMM, <strong>Automated Market Maker</strong>.</p>
+
+      <p>Di DeFi, kalau kamu mau tukar ETH ke USDC, kamu nggak ketemu orang lain yang jual USDC ke kamu. Kamu transaksi langsung sama <em>kolam uang</em> yang disebut <strong>liquidity pool</strong>. Kolam itu isinya dua aset sekaligus — misalnya ETH dan USDC — dan ada rumus yang mengatur harganya secara otomatis.</p>
+    </div>
+
+    <div class="section-title">Rumus yang Mengatur Segalanya</div>
+
+    <div class="prose">
+      <p>AMM paling populer pakai rumus yang namanya <em>constant product formula</em>. Simpelnya begini:</p>
+    </div>
+
+    <div class="formula">
+      <div class="formula-label">Constant Product Formula (Uniswap v2)</div>
+      x × y = k
+      <div style="font-size:11px;color:var(--muted);margin-top:8px;font-family:var(--sans)">
+        x = jumlah token A di pool &nbsp;|&nbsp; y = jumlah token B di pool &nbsp;|&nbsp; k = angka konstan
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>k itu nggak boleh berubah. Jadi kalau ada orang ambil token A dari pool, token B di pool harus nambah — supaya hasil kalinya tetap sama. Dari situ harga terbentuk secara otomatis.</p>
+    </div>
+
+    <div class="box box-example">
+      <span class="box-label">Contoh Angka Konkret</span>
+      <p>Pool isi: <strong>100 ETH</strong> dan <strong>200.000 USDC</strong>. Maka k = 100 × 200.000 = <strong>20.000.000</strong>.</p>
+      <p style="margin-top:8px">Kamu mau beli 1 ETH. Setelah kamu ambil, ETH tinggal 99. Supaya k tetap 20.000.000, USDC harus jadi 20.000.000 ÷ 99 = <strong>202.020 USDC</strong>. Berarti kamu bayar sekitar <strong>2.020 USDC</strong> — bukan 2.000.</p>
+      <p style="margin-top:8px">Selisih 20 USDC itu disebut <em>price impact</em>. Makin besar transaksi kamu relatif terhadap ukuran pool, makin mahal harga yang kamu bayar.</p>
+    </div>
+
+    <div class="section-title">Siapa yang Isi Pool?</div>
+
+    <div class="prose">
+      <p>Pool nggak bisa jalan kalau nggak ada yang deposit. Orang yang deposit aset ke pool disebut <strong>Liquidity Provider (LP)</strong>. Mereka deposit dua aset sekaligus dengan proporsi seimbang, dan sebagai imbalannya dapat bagian dari fee tiap transaksi yang lewat pool mereka.</p>
+      <p>Misalnya fee pool 0.3%. Tiap ada orang swap, 0.3% dari nilai swap itu masuk ke pool dan dibagi ke semua LP secara proporsional sesuai berapa besar bagian mereka di pool.</p>
+    </div>
+
+    <div class="box box-tip">
+      <span class="box-label">Perlu Diingat</span>
+      Semakin besar pool (TVL tinggi), semakin kecil price impact untuk transaksi yang sama. Makanya protokol DeFi berlomba-lomba narik likuiditas sebanyak mungkin.
+    </div>
+
+    <div class="section-title">Kamus Istilah</div>
+    <div class="term-grid">
+      <div class="term-card">
+        <div class="term-name">AMM</div>
+        <div class="term-def">Automated Market Maker. Sistem yang menentukan harga aset secara otomatis pakai rumus matematika.</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">Liquidity Pool</div>
+        <div class="term-def">Kolam aset yang di-deposit oleh LP. Digunakan untuk eksekusi swap oleh siapapun.</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">Price Impact</div>
+        <div class="term-def">Selisih harga yang terjadi karena transaksi kamu mengubah komposisi pool.</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">TVL</div>
+        <div class="term-def">Total Value Locked. Total nilai aset yang di-deposit ke suatu protokol. Ukuran seberapa besar protokol itu.</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">LP Token</div>
+        <div class="term-def">Token bukti kepemilikan yang didapat LP setelah deposit. Dipakai untuk tarik kembali asetnya.</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">Slippage</div>
+        <div class="term-def">Perbedaan harga yang kamu harap vs harga yang benar-benar kamu dapat saat transaksi.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- CHAPTER 2: IMPERMANENT LOSS            -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="il" class="chapter fade-up">
+    <div class="chapter-label">
+      <span class="chapter-num">02</span>
+      <div class="chapter-line"></div>
+    </div>
+    <h2>Impermanent Loss</h2>
+    <p class="chapter-sub">Risiko tersembunyi yang sering diabaikan LP pemula</p>
+
+    <div class="prose">
+      <p>Jadi LP kedengarannya enak — deposit aset, dapat fee terus. Tapi ada risiko yang namanya <strong>impermanent loss</strong>, dan ini salah satu konsep paling penting yang sering bikin orang rugi tanpa sadar.</p>
+      <p>Intinya: ketika harga salah satu aset di pool berubah signifikan, nilai yang kamu dapat kalau tarik aset dari pool lebih kecil dibanding kalau kamu cuma diam hold aset itu tanpa masuk pool sama sekali.</p>
+    </div>
+
+    <div class="section-title">Pakai Angka Biar Jelas</div>
+
+    <table class="calc-table">
+      <thead>
+        <tr>
+          <th>Situasi</th>
+          <th>ETH</th>
+          <th>USDC</th>
+          <th>Total Nilai</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Saat kamu deposit (ETH = $2.000)</td>
+          <td class="highlight">1 ETH</td>
+          <td class="highlight">2.000 USDC</td>
+          <td class="highlight">$4.000</td>
+        </tr>
+        <tr>
+          <td>ETH naik ke $4.000 — kamu tarik dari pool</td>
+          <td class="highlight">~0.707 ETH</td>
+          <td class="highlight">~2.828 USDC</td>
+          <td class="highlight">$5.656</td>
+        </tr>
+        <tr>
+          <td>Kalau kamu nggak masuk pool, cuma hold</td>
+          <td>1 ETH ($4.000)</td>
+          <td>2.000 USDC</td>
+          <td style="color:var(--green);font-family:var(--mono);font-weight:500">$6.000</td>
+        </tr>
+        <tr>
+          <td><strong>Impermanent Loss</strong></td>
+          <td colspan="2" style="color:var(--red)">Kamu "kehilangan" $344 dibanding hold</td>
+          <td class="warn">-$344</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="prose">
+      <p>Kenapa komposisi ETH kamu berkurang? Karena saat ETH naik, trader arbitrase datang beli ETH murah dari pool kamu sampai harganya seimbang dengan harga pasar. Proses itu menguras ETH dari pool dan mengisi USDC.</p>
+    </div>
+
+    <div class="box box-analogy">
+      <span class="box-label">Analogi Simpel</span>
+      Kamu titip apel dan uang ke toko. Toko jual apel kamu pas harga lagi naik, ganti sama uang lebih banyak. Kamu tetap untung dibanding modal awal — tapi kalau kamu tahan apelnya sendiri dan jual sendiri, kamu dapat lebih banyak.
+    </div>
+
+    <div class="section-title">Kenapa Namanya "Impermanent"?</div>
+
+    <div class="prose">
+      <p>Karena kalau harga ETH balik ke $2.000 (sama persis saat kamu masuk), impermanent loss itu nol — seolah nggak pernah ada. Loss itu baru jadi <em>permanen</em> kalau kamu tarik aset saat harga masih berbeda dari harga masuk.</p>
+      <p>Dalam praktiknya, "impermanent" ini agak menyesatkan karena harga hampir nggak pernah balik persis ke titik awal. Makanya banyak analyst yang menyebutnya <strong>divergence loss</strong> — lebih jujur menggambarkan risikonya.</p>
+    </div>
+
+    <div class="box box-warning">
+      <span class="box-label">Kapan IL Paling Berbahaya?</span>
+      Saat kamu masuk pool dengan dua aset yang harganya bisa bergerak sangat berbeda — misalnya ETH/token baru yang volatile. Pool stablecoin seperti USDC/USDT hampir nggak kena IL karena keduanya selalu ~$1.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- CHAPTER 3: LENDING & BORROWING         -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="lending" class="chapter fade-up">
+    <div class="chapter-label">
+      <span class="chapter-num">03</span>
+      <div class="chapter-line"></div>
+    </div>
+    <h2>Lending & Borrowing</h2>
+    <p class="chapter-sub">Bank tanpa bank — Aave, Compound, dan cara kerjanya</p>
+
+    <div class="prose">
+      <p>Bayangin bank, tapi tanpa bank. Nggak ada yang approve pinjaman kamu, nggak ada KYC, nggak ada kantor. Semua diatur smart contract. Itu intinya lending protocol seperti <strong>Aave</strong> dan <strong>Compound</strong>.</p>
+    </div>
+
+    <div class="section-title">Dua Pihak yang Terlibat</div>
+
+    <div class="compare">
+      <div class="compare-card">
+        <h4>Lender (Pemberi Pinjaman)</h4>
+        <ul>
+          <li>Deposit aset ke protokol</li>
+          <li>Dapat bunga dari peminjam</li>
+          <li>Kapan aja bisa tarik (kalau likuid)</li>
+          <li>Dapat aToken sebagai bukti deposit</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <h4>Borrower (Peminjam)</h4>
+        <ul>
+          <li>Harus deposit kolateral dulu</li>
+          <li>Baru boleh pinjam, tapi lebih kecil dari kolateral</li>
+          <li>Bayar bunga ke protokol</li>
+          <li>Kena likuidasi kalau kolateral turun</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-title">Kenapa Harus Ada Kolateral?</div>
+
+    <div class="prose">
+      <p>Di DeFi nggak ada identitas. Protokol nggak tahu siapa kamu, nggak bisa kejar kamu kalau kabur. Satu-satunya cara protokol aman adalah dengan minta kolateral yang nilainya <em>lebih besar</em> dari pinjaman. Ini disebut <strong>overcollateralized borrowing</strong>.</p>
+    </div>
+
+    <div class="box box-example">
+      <span class="box-label">Contoh Angka</span>
+      <p>Kamu deposit <strong>1 ETH senilai $3.000</strong> sebagai kolateral. Protokol kasih kamu batas pinjam 75% dari nilai kolateral = <strong>$2.250</strong>. Kamu pinjam 2.000 USDC.</p>
+      <p style="margin-top:8px">Selama harga ETH nggak turun terlalu jauh, posisi kamu aman. Tapi kalau ETH turun, kamu mulai mendekati zona bahaya.</p>
+    </div>
+
+    <div class="section-title">Bunga yang Dinamis</div>
+
+    <div class="prose">
+      <p>Bunga di lending protocol nggak fixed — naik turun otomatis tergantung berapa banyak aset yang sedang dipinjam dibanding yang tersedia. Konsepnya namanya <em>utilization rate</em>.</p>
+    </div>
+
+    <div class="formula">
+      <div class="formula-label">Utilization Rate</div>
+      Utilization = Total Dipinjam ÷ Total di-Deposit
+    </div>
+
+    <div class="prose">
+      <p>Kalau utilization rendah → banyak aset nganggur → bunga rendah supaya orang mau pinjam. Kalau utilization tinggi → hampir semua aset sudah dipinjam → bunga naik supaya lender mau deposit lebih banyak dan peminjam pikir dua kali sebelum ambil lebih banyak.</p>
+      <p>Ini supply-demand yang berjalan otomatis tanpa ada manusia yang setting harganya.</p>
+    </div>
+
+    <div class="section-title">Kenapa Orang Mau Pinjam?</div>
+
+    <ul class="step-list">
+      <li>
+        <div class="step-num">1</div>
+        <div><strong>Nggak mau jual aset.</strong> Kamu hold ETH dan yakin harganya naik. Butuh cash sekarang tapi nggak mau lepas ETH. Solusi: kolateralkan ETH, pinjam stablecoin, pakai stablecoin itu.</div>
+      </li>
+      <li>
+        <div class="step-num">2</div>
+        <div><strong>Leverage.</strong> Pinjam USDC → beli ETH lagi → deposit ETH itu sebagai kolateral → pinjam lagi. Loop ini amplify keuntungan — tapi juga amplify kerugian kalau harga turun.</div>
+      </li>
+      <li>
+        <div class="step-num">3</div>
+        <div><strong>Yield arbitrase.</strong> Pinjam aset A yang bunganya rendah, deposit ke protokol lain yang yield-nya lebih tinggi, ambil selisihnya sebagai keuntungan.</div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- CHAPTER 4: LIQUIDATION                 -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="liquidation" class="chapter fade-up">
+    <div class="chapter-label">
+      <span class="chapter-num">04</span>
+      <div class="chapter-line"></div>
+    </div>
+    <h2>Liquidation</h2>
+    <p class="chapter-sub">Apa yang terjadi ketika kolateral kamu nggak cukup lagi</p>
+
+    <div class="prose">
+      <p>Harga aset crypto bisa turun cepat. Kalau ETH kamu turun cukup jauh, nilai kolateral kamu mendekati nilai hutang — di titik itu protokol akan paksa jual kolateral kamu sebelum kolateral itu nggak cukup lagi nutup hutang. Proses ini disebut <strong>liquidation</strong>.</p>
+    </div>
+
+    <div class="section-title">Health Factor</div>
+
+    <div class="prose">
+      <p>Protokol seperti Aave punya angka yang namanya <em>health factor</em> — indikator seberapa sehat posisi pinjaman kamu. Kalau health factor di atas 1, kamu aman. Kalau turun ke 1 atau di bawah, posisi kamu kena likuidasi.</p>
+    </div>
+
+    <table class="calc-table">
+      <thead>
+        <tr><th>Kondisi</th><th>ETH Price</th><th>Kolateral</th><th>Hutang</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Saat masuk</td>
+          <td>$3.000</td>
+          <td>$3.000</td>
+          <td>$2.000 USDC</td>
+          <td style="color:var(--green);font-weight:500">Aman</td>
+        </tr>
+        <tr>
+          <td>ETH turun</td>
+          <td>$2.600</td>
+          <td>$2.600</td>
+          <td>$2.000 USDC</td>
+          <td style="color:var(--amber);font-weight:500">Waspada</td>
+        </tr>
+        <tr>
+          <td>Mendekati batas</td>
+          <td>$2.500</td>
+          <td>$2.500</td>
+          <td>$2.000 USDC</td>
+          <td style="color:var(--red);font-weight:500">Bahaya</td>
+        </tr>
+        <tr>
+          <td>Likuidasi terjadi</td>
+          <td>$2.400</td>
+          <td>$2.400</td>
+          <td>$2.000 USDC</td>
+          <td class="warn">LIKUIDASI</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="section-title">Siapa yang Ngelikuidasi?</div>
+
+    <div class="prose">
+      <p>Bukan manusia yang duduk monitor. Ada <strong>bot-bot otomatis</strong> yang 24 jam scanning semua posisi di protokol. Begitu ada posisi yang eligible untuk dilikuidasi, bot langsung eksekusi dan dapat reward berupa diskon dari kolateral si peminjam — biasanya 5–10%.</p>
+      <p>Diskon ini yang jadi insentif supaya ada pihak yang mau jadi likuidator. Sistem ini bikin protokol tetap solvent tanpa perlu tim khusus.</p>
+    </div>
+
+    <div class="box box-tip">
+      <span class="box-label">Tips Hindari Likuidasi</span>
+      Jangan pinjam mendekati batas maksimum. Kalau batas pinjam $2.250, pinjam $1.500 aja dan kasih buffer yang cukup. Makin volatile aset kolateral kamu, makin besar buffer yang kamu butuhkan.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- CHAPTER 5: YIELD FARMING               -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="yield" class="chapter fade-up">
+    <div class="chapter-label">
+      <span class="chapter-num">05</span>
+      <div class="chapter-line"></div>
+    </div>
+    <h2>Yield Farming</h2>
+    <p class="chapter-sub">Cara cari yield setinggi mungkin — dan kenapa harus skeptis</p>
+
+    <div class="prose">
+      <p>Yield farming intinya adalah strategi aktif mencari return tertinggi dengan memindahkan aset ke berbagai protokol. Kalau lending dan staking itu pasif, yield farming lebih seperti aktif kerja.</p>
+    </div>
+
+    <div class="section-title">Cara Kerjanya</div>
+
+    <ul class="step-list">
+      <li>
+        <div class="step-num">1</div>
+        <div>Kamu deposit ke liquidity pool → dapat <strong>LP token</strong> sebagai bukti kepemilikan.</div>
+      </li>
+      <li>
+        <div class="step-num">2</div>
+        <div>LP token itu kamu deposit lagi ke tempat yang namanya <strong>"farm"</strong> — dapat reward token tambahan di atas fee pool yang sudah jalan.</div>
+      </li>
+      <li>
+        <div class="step-num">3</div>
+        <div>Hasilnya kamu dapat <em>dua lapis reward</em>: fee dari swap yang lewat pool, plus reward token dari farm.</div>
+      </li>
+      <li>
+        <div class="step-num">4</div>
+        <div>Reward token bisa di-compound — dijual jadi lebih banyak LP token, deposit lagi ke farm, dapat lebih banyak reward. Loop ini yang bikin APY kelihatan sangat tinggi.</div>
+      </li>
+    </ul>
+
+    <div class="section-title">Kenapa APY Bisa 500%?</div>
+
+    <div class="prose">
+      <p>Protokol baru butuh likuiditas supaya bisa berfungsi. Tanpa likuiditas, nggak ada yang mau pakai karena slippage-nya besar. Cara paling cepat narik likuiditas adalah kasih insentif besar — yaitu reward berupa token protokol itu sendiri.</p>
+      <p>Masalahnya, ini seperti bayar orang pakai saham perusahaan yang baru berdiri. APY 500% itu sebagian besar dibayar pakai token yang inflasinya tinggi. Begitu orang mulai jual reward token itu, harganya turun, APY real-nya turun juga, orang cabut likuiditas, harga makin turun — ini yang sering disebut <em>death spiral</em>.</p>
+    </div>
+
+    <div class="box box-warning">
+      <span class="box-label">APY Tinggi = Wajib Skeptis</span>
+      Sebelum masuk farm, selalu tanya: reward dibayar pakai apa? Seberapa besar emisi token per harinya? Kalau protokolnya baru seminggu dan APY 1000%, hampir pasti itu inflasi token, bukan revenue nyata.
+    </div>
+
+    <div class="section-title">Risiko Yield Farming</div>
+
+    <div class="term-grid">
+      <div class="term-card">
+        <div class="term-name">Impermanent Loss</div>
+        <div class="term-def">Masih berlaku karena kamu masuk liquidity pool. Fee yang kamu dapat harus lebih besar dari IL supaya profitable.</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">Smart Contract Risk</div>
+        <div class="term-def">Kode protokol bisa ada bug dan di-exploit. Dana kamu bisa hilang 100% dalam sekejap.</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">Token Risk</div>
+        <div class="term-def">Reward token yang kamu dapat bisa nilainya nol besok kalau proyeknya collapse.</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">Complexity Risk</div>
+        <div class="term-def">Makin banyak protokol yang di-stack, makin banyak titik failure. Satu kena hack, semua posisi bisa kena dampak.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- CHAPTER 6: STAKING                     -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="staking" class="chapter fade-up">
+    <div class="chapter-label">
+      <span class="chapter-num">06</span>
+      <div class="chapter-line"></div>
+    </div>
+    <h2>Staking & Liquid Staking</h2>
+    <p class="chapter-sub">Lock aset, dapat reward — dan cara supaya aset tetap bisa dipakai</p>
+
+    <div class="prose">
+      <p>Staking itu simpel: kamu lock aset di suatu protokol, dapat reward sebagai imbalannya. Tapi ada dua jenis staking yang beda fungsinya dan penting kamu bedain.</p>
+    </div>
+
+    <div class="section-title">Dua Jenis Staking</div>
+
+    <div class="compare">
+      <div class="compare-card">
+        <h4>Staking untuk Keamanan Jaringan</h4>
+        <ul>
+          <li>Dipakai di blockchain Proof of Stake seperti Ethereum</li>
+          <li>Validator deposit ETH sebagai jaminan kejujuran</li>
+          <li>Kalau curang, ETH dipotong (slashing)</li>
+          <li>Dapat reward dari fee transaksi + emisi baru</li>
+          <li>Butuh 32 ETH untuk jadi validator penuh</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <h4>Staking di Protokol DeFi</h4>
+        <ul>
+          <li>Stake token protokol tertentu</li>
+          <li>Dapat bagian dari revenue protokol</li>
+          <li>Kadang dapat hak voting governance</li>
+          <li>Risiko lebih rendah dari yield farming</li>
+          <li>Yield biasanya juga lebih rendah</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-title">Liquid Staking — Masalah dan Solusinya</div>
+
+    <div class="prose">
+      <p>Masalah klasik staking: aset kamu terkunci. Selama di-stake, kamu nggak bisa pakai ETH itu di tempat lain. Ini kesempatan yang hilang.</p>
+      <p>Liquid staking menyelesaikan masalah ini. Kamu deposit ETH ke protokol seperti <strong>Lido</strong>, mereka stake ETH kamu di Ethereum network, dan kasih kamu token representasi yang namanya <strong>stETH</strong>. Nilai stETH naik seiring reward staking yang masuk.</p>
+      <p>Yang menarik: stETH ini bisa kamu pakai lagi di protokol DeFi lain — dijadiin kolateral di Aave, atau dipakai di liquidity pool. Jadi ETH kamu kerja di dua tempat sekaligus.</p>
+    </div>
+
+    <div class="box box-analogy">
+      <span class="box-label">Analogi</span>
+      Kamu taruh uang di deposito bank, bank kasih kamu sertifikat deposito. Kamu bisa gadaikan sertifikat itu untuk pinjam uang lagi — sambil bunga deposito tetap jalan. Liquid staking itu versi crypto-nya.
+    </div>
+
+    <div class="box box-tip">
+      <span class="box-label">LRT — Layer Berikutnya</span>
+      Di 2024–2026 muncul <strong>Liquid Restaking Token (LRT)</strong> — versi lebih canggih dari LST. Aset kamu bisa di-restake ke multiple protokol sekaligus lewat platform seperti EigenLayer, dapat yield dari banyak tempat. Risikonya juga berlapis.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- CHAPTER 7: STABLECOINS                 -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="stablecoins" class="chapter fade-up">
+    <div class="chapter-label">
+      <span class="chapter-num">07</span>
+      <div class="chapter-line"></div>
+    </div>
+    <h2>Stablecoins</h2>
+    <p class="chapter-sub">Tiga cara berbeda untuk bikin token yang nilainya selalu $1</p>
+
+    <div class="prose">
+      <p>Stablecoin itu token crypto yang dirancang supaya nilainya stabil di $1 — atau mata uang lain. Tapi cara mereka menjaga nilai $1 itu berbeda-beda, dan perbedaan itu sangat penting karena menentukan risikonya.</p>
+    </div>
+
+    <div class="section-title">Tiga Jenis Stablecoin</div>
+
+    <ul class="step-list">
+      <li>
+        <div class="step-num">1</div>
+        <div>
+          <strong>Fiat-backed (USDC, USDT)</strong><br>
+          <span style="color:var(--muted);font-size:13px">Paling simpel. Setiap 1 USDC yang beredar, ada $1 nyata yang disimpan di rekening bank atau aset setara. Risikonya: kamu harus percaya sama perusahaan yang pegang uangnya (Tether untuk USDT, Circle untuk USDC). Ini risiko counterparty — terpusat, tapi paling stabil.</span>
+        </div>
+      </li>
+      <li>
+        <div class="step-num">2</div>
+        <div>
+          <strong>Crypto-backed (DAI, LUSD)</strong><br>
+          <span style="color:var(--muted);font-size:13px">Dijamin oleh crypto lain seperti ETH, tapi overcollateralized. Mau cetak 1.000 DAI? Kamu harus deposit kolateral senilai $1.500+ di Maker Protocol. Lebih desentralisasi dari fiat-backed, tapi kalau harga kolateral crash cepat bisa ada masalah.</span>
+        </div>
+      </li>
+      <li>
+        <div class="step-num">3</div>
+        <div>
+          <strong>Algorithmic (yang sudah ada + yang bangkrut)</strong><br>
+          <span style="color:var(--muted);font-size:13px">Mencoba menjaga $1 pakai algoritma dan insentif ekonomi, tanpa kolateral nyata. UST milik Terra Luna adalah contoh paling terkenal — dan paling tragis. Collapse di 2022, menghapus $40 miliar dalam beberapa hari. Pelajaran: algorithmic stablecoin tanpa kolateral nyata sangat rentan terhadap bank run.</span>
+        </div>
+      </li>
+    </ul>
+
+    <div class="box box-warning">
+      <span class="box-label">Pelajaran dari Terra Luna 2022</span>
+      UST menjaga peg $1 dengan mekanisme mint/burn bersama LUNA. Saat kepercayaan goyah, orang berbondong-bondong keluar, LUNA dicetak terus untuk bayar penebus UST, supply LUNA meledak, harganya jatuh, kepercayaan makin hilang — spiral ke nol dalam 72 jam. Ini yang disebut <em>death spiral algorithmic stablecoin</em>.
+    </div>
+
+    <div class="section-title">Cara Cek Peg Stablecoin</div>
+
+    <div class="prose">
+      <p>Stablecoin yang sehat harganya selalu sangat dekat $1. Kalau kamu lihat stablecoin harganya $0.95 atau $1.05 di market, itu tanda ada sesuatu yang salah — entah krisis likuiditas, masalah kepercayaan, atau manipulasi. Ini yang disebut <em>depeg</em>.</p>
+      <p>Kamu bisa monitor peg di DeFiLlama bagian Stablecoins, atau langsung di DEX aggregator. Ini skill dasar yang perlu jadi kebiasaan kalau kamu mau serius di DeFi.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- CHAPTER 8: RISK TAXONOMY               -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="risk" class="chapter fade-up">
+    <div class="chapter-label">
+      <span class="chapter-num">08</span>
+      <div class="chapter-line"></div>
+    </div>
+    <h2>DeFi Risk Taxonomy</h2>
+    <p class="chapter-sub">Semua risiko yang harus kamu pahami sebelum taruh modal</p>
+
+    <div class="prose">
+      <p>DeFi menawarkan yield yang jauh lebih tinggi dari instrumen tradisional — tapi itu karena risikonya juga jauh lebih tinggi. Kamu harus bisa kategorikan dan ukur risiko sebelum masuk ke protokol manapun.</p>
+    </div>
+
+    <div class="section-title">Kategori Risiko Utama</div>
+
+    <ul class="step-list">
+      <li>
+        <div class="step-num" style="background:var(--red)">!</div>
+        <div>
+          <strong>Smart Contract Risk</strong><br>
+          <span style="color:var(--muted);font-size:13px">Kode protokol ditulis manusia — bisa ada bug. Exploit smart contract sudah terjadi ratusan kali dan miliaran dolar hilang karenanya. Bahkan protokol yang sudah diaudit pun bisa kena. Cara mitigasi: lihat track record protokol, berapa lama sudah berjalan, sudah berapa kali diaudit oleh siapa.</span>
+        </div>
+      </li>
+      <li>
+        <div class="step-num" style="background:var(--red)">!</div>
+        <div>
+          <strong>Liquidity Risk</strong><br>
+          <span style="color:var(--muted);font-size:13px">Saat market crash atau FUD besar, banyak LP tarik dana sekaligus. TVL drop drastis, slippage meledak, dan kamu mungkin nggak bisa tarik aset dengan harga yang kamu harap.</span>
+        </div>
+      </li>
+      <li>
+        <div class="step-num" style="background:var(--amber)">!</div>
+        <div>
+          <strong>Oracle Risk</strong><br>
+          <span style="color:var(--muted);font-size:13px">Protokol DeFi butuh data harga dari dunia luar — ini datangnya dari oracle seperti Chainlink. Kalau oracle dimanipulasi atau error, protokol bisa baca harga salah dan itu bisa dieksploit. Flash loan attack sering memanfaatkan ini.</span>
+        </div>
+      </li>
+      <li>
+        <div class="step-num" style="background:var(--amber)">!</div>
+        <div>
+          <strong>Governance Risk</strong><br>
+          <span style="color:var(--muted);font-size:13px">Banyak protokol DeFi dikendalikan oleh pemegang token melalui voting. Kalau satu pihak punya cukup token, mereka bisa vote untuk perubahan yang merugikan pengguna lain — termasuk drain treasury atau ubah parameter kritis.</span>
+        </div>
+      </li>
+      <li>
+        <div class="step-num" style="background:var(--muted)">!</div>
+        <div>
+          <strong>Regulatory Risk</strong><br>
+          <span style="color:var(--muted);font-size:13px">Regulasi crypto masih berkembang di Indonesia dan global. Protokol yang hari ini legal bisa esok kena ban atau pembatasan. Ini nggak berarti harus takut, tapi perlu dipantau — terutama kalau kamu berencana karir di space ini.</span>
+        </div>
+      </li>
+    </ul>
+
+    <div class="box box-analogy">
+      <span class="box-label">Framework Cepat Evaluasi Risiko</span>
+      Sebelum masuk protokol manapun, tanya tiga hal: (1) Sudah berapa lama berjalan dan pernah kena hack belum? (2) Siapa yang audit kodenya? (3) TVL-nya stabil atau naik turun drastis? Tiga pertanyaan ini nggak menjamin aman, tapi bisa eliminasi banyak protokol berisiko tinggi.
+    </div>
+
+    <div class="section-title">APY vs APR — Ini Beda</div>
+
+    <div class="prose">
+      <p>Satu lagi hal yang sering bikin orang salah kalkulasi:</p>
+    </div>
+
+    <div class="compare">
+      <div class="compare-card">
+        <h4>APR (Annual Percentage Rate)</h4>
+        <ul>
+          <li>Return tahunan tanpa compound</li>
+          <li>Misal: 12% APR = 1% per bulan</li>
+          <li>Lebih konservatif, lebih akurat</li>
+          <li>Dipakai untuk lending sederhana</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <h4>APY (Annual Percentage Yield)</h4>
+        <ul>
+          <li>Return tahunan dengan compound</li>
+          <li>12% APR bisa jadi ~12.68% APY</li>
+          <li>Angkanya selalu lebih besar dari APR</li>
+          <li>Sering dipakai protokol untuk kelihatan lebih menarik</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>Perbedaannya makin besar kalau compound-nya sering — harian vs mingguan vs tahunan. Kalau protokol tunjukin angka besar, selalu cek: itu APR atau APY? Dan reward dibayar pakai token apa?</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- RECAP -->
+  <div class="recap fade-up">
+    <h3>Rangkuman Fase 0</h3>
+    <ul>
+      <li>AMM pakai rumus x × y = k untuk tentukan harga secara otomatis tanpa order book</li>
+      <li>Liquidity Provider dapat fee tapi exposed ke impermanent loss saat harga bergerak</li>
+      <li>Lending protocol butuh overcollateral karena nggak ada identitas di DeFi</li>
+      <li>Liquidation terjadi otomatis via bot saat kolateral nggak cukup nutup hutang</li>
+      <li>Yield farming dapat yield berlapis tapi risikonya juga berlapis</li>
+      <li>Liquid staking bikin aset yang di-stake bisa tetap dipakai di protokol lain</li>
+      <li>Stablecoin ada tiga jenis — fiat-backed paling aman, algorithmic paling berisiko</li>
+      <li>APY selalu lebih besar dari APR, dan yield tinggi hampir selalu ada trade-off risiko</li>
+    </ul>
+  </div>
+
+  <!-- NEXT -->
+  <div style="margin-top:32px">
+    <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">Selanjutnya</div>
+    <div class="next-card">
+      <div>
+        <div class="label">Fase 1</div>
+        <div class="title">AI for DeFi Research & Analysis</div>
+      </div>
+      <div class="arrow">→</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>Bagian dari <strong>AI-Powered DeFi Analyst Course</strong> — Ditulis oleh <strong>Chloe</strong> untuk Cerulean</p>
+  <p style="margin-top:6px;font-size:11px">Bukan financial advice. Semua contoh angka hanya untuk ilustrasi.</p>
+</footer>
+
+<script>
+  // Nav scroll highlight
+  const sections = ['amm','il','lending','liquidation','yield','staking','stablecoins','risk'];
+  const btns = document.querySelectorAll('.toc-btn');
+
+  window.addEventListener('scroll', () => {
+    let current = sections[0];
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top < 140) current = id;
+    });
+    btns.forEach((btn, i) => btn.classList.toggle('active', sections[i] === current));
+  });
+
+  // Nav click
+  function navTo(id) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Fade in on scroll
+  const faders = document.querySelectorAll('.fade-up');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  faders.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
